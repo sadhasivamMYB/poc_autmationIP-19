@@ -115,11 +115,11 @@ export class InitialStockService {
                     const warehouseCode = String(row["warehouse code"]);
                     const itemCode = String(row["item code"]);
 
-                    // console.log(row, "🔃🔃❌❌❌✅✅")
+
                     const warehouse = await tx.query.warehouses.findFirst({
                         where: eq(warehouses.warehouseCode, warehouseCode)
                     });
-                    console.log(warehouse, "🔃🔃❌❌❌✅✅")
+
                     if (!warehouse?.id) throw new Error(`Warehouse code ${warehouseCode} not found.`);
 
                     const item = await tx.query.masterItems.findFirst({

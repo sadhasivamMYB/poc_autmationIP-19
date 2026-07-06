@@ -16,6 +16,7 @@ cron.schedule("0 0 * * *", async () => {
         await db.update(dailyStock)
             .set({ status: "LOCKED" })
             .where(lt(dailyStock.stockDate, today));
+
         console.log("Previous days' stock locked successfully.");
     } catch (err) {
         console.error("Error locking previous days' stock:", err);

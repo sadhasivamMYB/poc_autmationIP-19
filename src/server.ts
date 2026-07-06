@@ -5,6 +5,7 @@ import masterRoutes from "./routes/masterItem.route";
 import initialStockRoutes from "./routes/initialStock.route";
 import dailyStockRoutes from "./routes/dailystock.route";
 import warehouseRoutes from "./routes/warehouse.route";
+import userRoutes from "./routes/user.route";
 import "./job/stockGeneration.job"
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/api/master-item', masterRoutes)
 app.use('/api/initial-stock', initialStockRoutes)
 app.use('/api/daily-stock', dailyStockRoutes)
 app.use('/api/warehouse', warehouseRoutes)
+app.use('/api/users', userRoutes)
 app.use('/api/excel', excelRoutes)
 
 app.get("/health", (req, res) => {

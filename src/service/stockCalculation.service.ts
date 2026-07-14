@@ -18,17 +18,25 @@ export class StockCalculationService {
 
     }) {
 
+        const openingCases = Number(data.openingCases) || 0;
+        const openingBottles = Number(data.openingBottles) || 0;
+        const receivedCases = Number(data.receivedCases) || 0;
+        const receivedBottles = Number(data.receivedBottles) || 0;
+        const issuedCases = Number(data.issuedCases) || 0;
+        const issuedBottles = Number(data.issuedBottles) || 0;
+        const bottlePerCase = Number(data.bottlePerCase) || 1; // Default to 1 to prevent division by zero/NaN
+
         let opening =
-            data.openingCases * data.bottlePerCase +
-            data.openingBottles;
+            openingCases * bottlePerCase +
+            openingBottles;
 
         let received =
-            data.receivedCases * data.bottlePerCase +
-            data.receivedBottles;
+            receivedCases * bottlePerCase +
+            receivedBottles;
 
         let issued =
-            data.issuedCases * data.bottlePerCase +
-            data.issuedBottles;
+            issuedCases * bottlePerCase +
+            issuedBottles;
 
         let total =
             opening +
@@ -37,11 +45,11 @@ export class StockCalculationService {
 
         const cases =
             Math.floor(
-                total / data.bottlePerCase
+                total / bottlePerCase
             );
 
         const bottles =
-            total % data.bottlePerCase;
+            total % bottlePerCase;
 
         return {
 

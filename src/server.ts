@@ -6,6 +6,8 @@ import initialStockRoutes from "./routes/initialStock.route";
 import dailyStockRoutes from "./routes/dailystock.route";
 import warehouseRoutes from "./routes/warehouse.route";
 import userRoutes from "./routes/user.route";
+import compare from "./routes/compare.route";
+import dashboard from "./routes/dashboardStats.route"
 import "./job/stockGeneration.job"
 
 const app = express();
@@ -22,7 +24,9 @@ app.use('/api/initial-stock', initialStockRoutes)
 app.use('/api/daily-stock', dailyStockRoutes)
 app.use('/api/warehouse', warehouseRoutes)
 app.use('/api/users', userRoutes)
+app.use('/api/dashboard-stats', dashboard)
 app.use('/api/excel', excelRoutes)
+app.use('/api/compare', compare)
 
 app.get("/health", (req, res) => {
     res.send("Hello World! API is running.");
@@ -32,4 +36,4 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-});
+}); 

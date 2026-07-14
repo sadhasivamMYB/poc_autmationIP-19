@@ -22,6 +22,20 @@
       "when": 1783070730379,
       "tag": "0002_left_black_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783668814098,
+      "tag": "0003_classy_revanche",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783678318230,
+      "tag": "0004_square_captain_marvel",
+      "breakpoints": true
     }
   ]
 }

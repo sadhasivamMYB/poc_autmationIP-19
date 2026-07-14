@@ -35,17 +35,12 @@ router.get(
     DailyStockController.getToday
 );
 
-// router.get(
-//     "/history",
-//     DailyStockController.getHistory
-// );
-
 router.put(
     "/bulk", authenticate,
     DailyStockController.bulkUpdate
 );
 
-router.get("/history", authenticate, isAdmin, DailyStockController.customDateStockHistory)
+router.get("/history", authenticate, DailyStockController.customDateStockHistory)
 
 /**
  * Reports

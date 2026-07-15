@@ -112,6 +112,15 @@ export class DailyStockController {
             const stocks =
                 await DailyStockService.customDateStockHistory(date, warehouseId);
 
+            if (stocks.length === 0) {
+                return res.status(200).json({
+                    success: true,
+                    message: "No items found for the selected date.",
+                    data: [],
+                    warehouseDetail: warehouse
+                });
+            }
+
             return res.status(200).json({
                 success: true,
                 data: stocks,

@@ -213,7 +213,6 @@ export class DailyStockService {
 
         });
 
-        console.log(result, "🙌✨⏱️⏱️")
         return result
 
     }
@@ -223,20 +222,6 @@ export class DailyStockService {
         const customDate = new Date(date)
             .toISOString()
             .split("T")[0];
-
-        const exists = await db.query.dailyStock.findFirst({
-            where: and(
-                eq(dailyStock.stockDate, customDate),
-                eq(dailyStock.warehouseId, warehouseId)
-            ),
-        });
-
-        if (!exists) {
-            await StockGenerationService.generateForWarehouse(
-                customDate,
-                warehouseId
-            );
-        }
 
         const stocks = await db
             .select({

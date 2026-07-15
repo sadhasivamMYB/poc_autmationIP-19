@@ -17,6 +17,7 @@ export const compareStock = pgTable("compare_stock", {
     stoPending: numeric("sto_pending", { precision: 10, scale: 2 }).default("0"),
     grnPending: numeric("grn_pending", { precision: 10, scale: 2 }).default("0"),
     damages: numeric("damages", { precision: 10, scale: 2 }).default("0"),
+    pendingSupply: numeric("pending_supply", { precision: 10, scale: 2 }).default("0"),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").defaultNow(),
 });

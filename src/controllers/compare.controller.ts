@@ -25,13 +25,14 @@ export class CompareController {
                         itemName: item.itemName,
                         physicalStock: item.physicalStock?.toString() || "0",
                         systemStock: item.systemStock?.toString() || "0",
-                        // difference: item.difference?.toString() || "0",
+                        difference: item.difference?.toString() || "0",
                         manual: item.manual?.toString() || "0",
                         salesReturn: item.salesReturn?.toString() || "0",
                         blocked: item.blocked?.toString() || "0",
                         stoPending: item.stoPending?.toString() || "0",
                         grnPending: item.grnPending?.toString() || "0",
                         damages: item.damages?.toString() || "0",
+                        pendingSupply: item.pendingSupply?.toString() || "0",
                     })));
                 }
             });
@@ -54,12 +55,14 @@ export class CompareController {
                 for (const item of data) {
                     if (item.id) {
                         await tx.update(compareStock).set({
+                            difference: item.difference?.toString() || "0",
                             manual: item.manual?.toString() || "0",
                             salesReturn: item.salesReturn?.toString() || "0",
                             blocked: item.blocked?.toString() || "0",
                             stoPending: item.stoPending?.toString() || "0",
                             grnPending: item.grnPending?.toString() || "0",
                             damages: item.damages?.toString() || "0",
+                            pendingSupply: item.pendingSupply?.toString() || "0",
                         }).where(eq(compareStock.id, item.id));
                     }
                 }

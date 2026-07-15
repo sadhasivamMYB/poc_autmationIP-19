@@ -1,0 +1,1 @@
+ALTER TABLE "compare_stock" ADD COLUMN "pending_supply" numeric(10, 2) DEFAULT '0';

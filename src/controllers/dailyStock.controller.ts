@@ -55,7 +55,7 @@ export class DailyStockController {
 
             const { stocks } = req.body;
 
-            // console.log(stocks, "❌❌")
+            console.log(stocks, "❌❌")
 
             const result =
                 await DailyStockService.bulkUpdate(stocks);
@@ -79,8 +79,6 @@ export class DailyStockController {
 
     }
 
-
-    // only for Admin
     static async customDateStockHistory(
         req: any,
         res: Response
@@ -88,6 +86,17 @@ export class DailyStockController {
         try {
 
             const { warehouseId, date } = req.query;
+
+            const selectedDate = new Date(date);
+            const today = new Date();
+
+            // Remove the time part
+            selectedDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            if (selectedDate > today) {
+                throw new Error("Date cannot be greater than today");
+            }
 
             const warehouse = await db.query.warehouses.findFirst({
                 where: eq(warehouses.id, warehouseId),
@@ -102,6 +111,15 @@ export class DailyStockController {
 
             const stocks =
                 await DailyStockService.customDateStockHistory(date, warehouseId);
+
+            if (stocks.length === 0) {
+                return res.status(200).json({
+                    success: true,
+                    message: "No items found for the selected date.",
+                    data: [],
+                    warehouseDetail: warehouse
+                });
+            }
 
             return res.status(200).json({
                 success: true,

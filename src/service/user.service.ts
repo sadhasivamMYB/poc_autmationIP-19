@@ -1,6 +1,6 @@
 import { db } from "../database/db";
 import { users } from "../models/schema/users/users.schema";
-import { eq } from "drizzle-orm";
+import { desc, eq, ne } from "drizzle-orm";
 
 export class UserService {
     static async getAll() {
@@ -8,7 +8,9 @@ export class UserService {
             with: {
                 warehouse: true,
             },
-            orderBy: (users, { desc }) => [desc(users.createdAt)],
+
+            where: ne(users.role, "ADMIN"),
+            orderBy: [desc(users.createdAt)],
         });
 
         // Map fullName to name for frontend compatibility
@@ -25,7 +27,7 @@ export class UserService {
                 warehouse: true,
             },
         });
-        
+
         if (user) {
             return { ...user, name: user.fullName };
         }
@@ -43,7 +45,7 @@ export class UserService {
                 warehouseId: data.warehouseId || null,
             })
             .returning();
-        return { ...user, name: user.fullName };
+        return { ...user, name: user?.fullName };
     }
 
     static async update(id: number, data: any) {
@@ -53,7 +55,7 @@ export class UserService {
             role: data.role,
             warehouseId: data.warehouseId || null,
         };
-        
+
         if (data.password) {
             updateData.password = data.password;
         }
@@ -63,7 +65,7 @@ export class UserService {
             .set(updateData)
             .where(eq(users.id, id))
             .returning();
-            
+
         return user ? { ...user, name: user.fullName } : null;
     }
 

@@ -113,7 +113,7 @@ export class MasterItemsService {
 
       // Validate all rows first
       for (const row of data) {
-        const itemCode = String(row["C"]);
+        const itemCode = String(row["ItemCode"]);
 
         const existingItem = await db.query.masterItems.findFirst({
           where: eq(masterItems.itemCode, itemCode),
@@ -128,9 +128,9 @@ export class MasterItemsService {
       await db.transaction(async (tx) => {
         for (const row of data) {
           await tx.insert(masterItems).values({
-            itemCode: String(row["C"]),
-            itemName: row["LAGOS WAREHOUSE"],
-            bottlePerCase: Number(row["__EMPTY"]) || 0,
+            itemCode: String(row["ItemCode"]),
+            itemName: row["ItemName"],
+            bottlePerCase: Number(row["BottlePerCase"]) || 0,
             isActive: true
           });
         }

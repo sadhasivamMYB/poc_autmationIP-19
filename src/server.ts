@@ -8,6 +8,7 @@ import warehouseRoutes from "./routes/warehouse.route";
 import userRoutes from "./routes/user.route";
 import compare from "./routes/compare.route";
 import dashboard from "./routes/dashboardStats.route"
+import summaryRoutes from "./routes/summary.route"
 import "./job/stockGeneration.job"
 
 const app = express();
@@ -27,6 +28,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/dashboard-stats', dashboard)
 app.use('/api/excel', excelRoutes)
 app.use('/api/compare', compare)
+app.use('/api/summary', summaryRoutes)
 
 app.get("/health", (req, res) => {
     res.send("Hello World! API is running.");

@@ -12,8 +12,6 @@ export class DailyStockController {
         res: Response
     ) {
         try {
-            console.log(req.user, "🔃🔃🔃🔃⚠️👤")
-
             const warehouseId = req.user.warehouseId;
 
             const warehouse = await db.query.warehouses.findFirst({
@@ -23,10 +21,6 @@ export class DailyStockController {
                     id: true,
                 }
             })
-
-            console.log(warehouse, "WarehouseName")
-
-
             const stocks =
                 await DailyStockService.getToday(warehouseId);
 

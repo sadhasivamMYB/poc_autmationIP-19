@@ -16,7 +16,7 @@ export class DailyStockService {
 
         const today = new Date()
             .toISOString()
-            .split("T")[0];
+            .split("T")[0] as string;
 
         /**
          * Check if today's stock exists
@@ -221,7 +221,7 @@ export class DailyStockService {
 
         const customDate = new Date(date)
             .toISOString()
-            .split("T")[0];
+            .split("T")[0] as string;
 
         const stocks = await db
             .select({

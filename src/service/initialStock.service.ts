@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import * as XLSX from "xlsx";
 import { warehouses } from "../models/schema/warehouse/warehouse.schema";
 import { masterItems } from "../models/schema/master/master.schema";
@@ -17,11 +17,10 @@ export class InitialStockService {
     }) {
 
         const existing = await db.query.initialStock.findFirst({
-            where: (table, { and, eq }) =>
-                and(
-                    eq(table.warehouseId, data.warehouseId),
-                    eq(table.itemId, data.itemId)
-                ),
+            where: and(
+                eq(initialStock.warehouseId, data.warehouseId),
+                eq(initialStock.itemId, data.itemId)
+            ),
         });
 
         if (existing) {
@@ -106,9 +105,14 @@ export class InitialStockService {
     static async excelUpload(file: any) {
 
         try {
+
             const workbook = XLSX.readFile(file.path);
-            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const firstSheetName = workbook.SheetNames[0];
+            if (!firstSheetName) throw new Error("No sheets found in the uploaded file.");
+            const worksheet = workbook.Sheets[firstSheetName];
+            if (!worksheet) throw new Error(`Worksheet ${firstSheetName} not found in the uploaded file.`);
             const data = XLSX.utils.sheet_to_json(worksheet).splice(1);
+
 
             await db.transaction(async (tx) => {
                 for (const row of data as any[]) {
@@ -128,11 +132,10 @@ export class InitialStockService {
                     if (!item) throw new Error(`Item code ${itemCode} not found.`);
 
                     const existing = await tx.query.initialStock.findFirst({
-                        where: (table, { and, eq }) =>
-                            and(
-                                eq(table.warehouseId, warehouse.id),
-                                eq(table.itemId, item.id)
-                            ),
+                        where: and(
+                            eq(initialStock.warehouseId, warehouse.id),
+                            eq(initialStock.itemId, item.id)
+                        ),
                     });
                     if (existing) {
                         throw new Error(`Initial stock for item ${itemCode} in warehouse ${warehouseCode} already exists.`);

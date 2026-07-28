@@ -114,7 +114,7 @@ export class StockGenerationService {
 
         yesterday.setDate(yesterday.getDate() - 1);
 
-        const previousDate = yesterday.toISOString().split("T")[0];
+        const previousDate = yesterday.toISOString().split("T")[0] as string;
 
         return db.query.dailyStock.findFirst({
             where: and(

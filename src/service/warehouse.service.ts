@@ -17,11 +17,16 @@ export class WarehouseService {
 
     static excelUpload = async (file: any) => {
         try {
-            const workbook = XLSX.readFile(file.path);
-            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-            const data = XLSX.utils.sheet_to_json(worksheet).splice(1);
 
-            for (const row of data as any[]) {
+            const workbook = XLSX.readFile(file.path);
+            const firstSheetName = workbook.SheetNames[0];
+            if (!firstSheetName) throw new Error("No sheets found in the uploaded file.");
+            const worksheet = workbook.Sheets[firstSheetName];
+            if (!worksheet) throw new Error(`Worksheet ${firstSheetName} not found in the uploaded file.`);
+            const data = XLSX.utils.sheet_to_json(worksheet).splice(1) as Record<string, any>[];
+
+
+            for (const row of data) {
 
                 console.log(row, "🔃🔃🔃🔃🔃✨")
 

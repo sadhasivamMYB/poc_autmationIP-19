@@ -107,9 +107,13 @@ export class MasterItemsService {
 
   static async excelUpload(file: any) {
     try {
+
       const workbook = XLSX.readFile(file.path);
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const data = XLSX.utils.sheet_to_json(worksheet).splice(1);
+      const firstSheetName = workbook.SheetNames[0];
+      if (!firstSheetName) throw new Error("No sheets found in the uploaded file.");
+      const worksheet = workbook.Sheets[firstSheetName];
+      if (!worksheet) throw new Error(`Worksheet ${firstSheetName} not found in the uploaded file.`);
+      const data = XLSX.utils.sheet_to_json(worksheet).splice(1) as Record<string, any>[];
 
       // Validate all rows first
       for (const row of data) {

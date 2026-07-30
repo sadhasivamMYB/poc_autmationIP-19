@@ -9,15 +9,33 @@ import userRoutes from "./routes/user.route";
 import compare from "./routes/compare.route";
 import dashboard from "./routes/dashboardStats.route"
 import summaryRoutes from "./routes/summary.route"
+import excelRoutes from "./routes/excel.route";
 import "./job/stockGeneration.job"
 
 const app = express();
 
-app.use(cors());
+
+const allowedOrigins = process.env.ALLOWED_ORIGIN_LISTS?.split(",").map(origin => origin.trim()) || [];
+
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            //   // Allow requests without Origin (Postman, curl, mobile apps)
+            //   if (!origin) {
+            //     return callback(null, true);
+            //   }
+
+            if (allowedOrigins.includes(origin as string)) {
+                return callback(null, true);
+            }
+
+            return callback(new Error(`Origin '${origin}' is not allowed by CORS`));
+        },
+        credentials: true,
+    })
+);
+
 app.use(express.json());
-
-
-import excelRoutes from "./routes/excel.route";
 
 app.use("/api/auth", authRoutes);
 app.use('/api/master-item', masterRoutes)

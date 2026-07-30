@@ -6,6 +6,7 @@ import {
     authenticate
 } from "../middleware/auth.middleware";
 import { isAdmin } from "../middleware/isAdmin.middleware";
+import { LoginLimiter } from "../utils/ratelimiters";
 
 const router = Router();
 
@@ -24,7 +25,7 @@ router.post(
 router.post(
 
     "/login",
-
+    LoginLimiter,
     AuthController.login
 
 );
@@ -40,6 +41,7 @@ router.get(
 );
 router.post(
     "/microsoft",
+    LoginLimiter,
     AuthController.microsoftLogin
 );
 

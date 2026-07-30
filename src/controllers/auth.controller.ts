@@ -1,42 +1,44 @@
 import { Request, Response } from "express";
 
 import { AuthService } from "../service/auth.service";
+import { LoginRequest, RegisterRequest, MicrosoftLoginRequest } from "../zod/auth.zod";
 
 export class AuthController {
 
     static async register(req: Request, res: Response) {
+        const body: RegisterRequest = req.body;
+        const user = await AuthService.register(body);
 
-        const user = await AuthService.register(req.body);
-
-        res.status(201).json(user);
+        res.status(201).json({ success: true, data: user });
 
     }
 
     static async login(req: Request, res: Response) {
-
+        const body: LoginRequest = req.body;
         const data = await AuthService.login(
 
-            req.body.email,
-            req.body.password
+            body.email,
+            body.password
 
         );
 
-        res.json(data);
+        res.json({ success: true, data });
 
     }
 
     static async profile(req: any, res: Response) {
 
-        res.json(req.user);
+        res.json({ success: true, data: req.user });
 
     }
 
     static async microsoftLogin(req: Request, res: Response) {
         try {
-            const token = req.body.token;
+            const body: MicrosoftLoginRequest = req.body;
+            const token = body.token;
             const response = await AuthService.microsoftLogin(token);
 
-            res.json(response);
+            res.json({ success: true, data: response });
         } catch (error: unknown) {
             const err = error as Error;
             console.error("Microsoft login error:", err.message);

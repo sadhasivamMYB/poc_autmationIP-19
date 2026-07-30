@@ -31,4 +31,22 @@ export class AuthController {
 
     }
 
+    static async microsoftLogin(req: Request, res: Response) {
+        try {
+            const token = req.body.token;
+            const response = await AuthService.microsoftLogin(token);
+
+            res.json(response);
+        } catch (error: unknown) {
+            const err = error as Error;
+            console.error("Microsoft login error:", err.message);
+            res.status(401).json({
+                success: false,
+                message: err.message === "User does not exist in the system. Access denied."
+                    ? "User does not exist. Please contact your administrator."
+                    : err.message || "Authentication failed."
+            });
+        }
+    };
+
 }

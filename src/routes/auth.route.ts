@@ -38,5 +38,9 @@ router.get(
     AuthController.profile
 
 );
+router.post(
+    "/microsoft",
+    AuthController.microsoftLogin
+);
 
 export default router;

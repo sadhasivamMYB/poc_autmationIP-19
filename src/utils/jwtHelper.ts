@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export function generateToken(payload: object) {
+export function generateToken(payload: any) {
 
     return jwt.sign(
         payload,

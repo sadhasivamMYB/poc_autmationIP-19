@@ -1,10 +1,14 @@
 import { db } from "../database/db";
 import { users } from "../models/schema/users/users.schema";
 import { desc, eq, ne } from "drizzle-orm";
+import { sanitizeUser } from "../utils/sanitizeUser";
 
 export class UserService {
     static async getAll() {
         return await db.query.users.findMany({
+            columns: {
+                password: false,
+            },
             with: {
                 warehouse: true,
             },
@@ -17,6 +21,9 @@ export class UserService {
     static async getById(id: number) {
         return await db.query.users.findFirst({
             where: eq(users.id, id),
+            columns: {
+                password: false,
+            },
             with: {
                 warehouse: true,
             },
@@ -34,7 +41,7 @@ export class UserService {
                 warehouseId: data.warehouseId || null,
             })
             .returning();
-        return user;
+        return sanitizeUser(user);
     }
 
     static async update(id: number, data: any) {
@@ -55,7 +62,7 @@ export class UserService {
             .where(eq(users.id, id))
             .returning();
 
-        return user;
+        return sanitizeUser(user);
     }
 
     static async delete(id: number) {
@@ -63,6 +70,6 @@ export class UserService {
             .delete(users)
             .where(eq(users.id, id))
             .returning();
-        return user;
+        return sanitizeUser(user);
     }
 }

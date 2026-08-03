@@ -5,6 +5,7 @@ import { UserStatus } from "../models/enums/userStatus.enum";
 import { InvitationRepository } from "../repository/invitation.repository";
 import { generateSecureToken, hashToken } from "../utils/token";
 import { sendInvitationEmail } from "../utils/mailer";
+import { sanitizeUser } from "../utils/sanitizeUser";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
@@ -62,7 +63,7 @@ export class InvitationService {
 
             return {
                 success: true,
-                data: newUser,
+                data: sanitizeUser(newUser),
                 message: "Invitation email sent successfully."
             };
 

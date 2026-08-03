@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 
 import { AuthService } from "../service/auth.service";
+import { LoginRequest, RegisterRequest, MicrosoftLoginRequest } from "../zod/auth.zod";
 
 export class AuthController {
 
     static async register(req: Request, res: Response) {
+        const body: RegisterRequest = req.body;
+        const user = await AuthService.register(body);
 
         const user = await AuthService.register(req.body);
 
@@ -16,11 +19,11 @@ export class AuthController {
     }
 
     static async login(req: Request, res: Response) {
-
+        const body: LoginRequest = req.body;
         const data = await AuthService.login(
 
-            req.body.email,
-            req.body.password
+            body.email,
+            body.password
 
         );
 
@@ -42,7 +45,8 @@ export class AuthController {
 
     static async microsoftLogin(req: Request, res: Response) {
         try {
-            const token = req.body.token;
+            const body: MicrosoftLoginRequest = req.body;
+            const token = body.token;
             const response = await AuthService.microsoftLogin(token);
 
             res.json({

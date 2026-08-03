@@ -3,6 +3,7 @@ import { users } from "../models/schema/users/users.schema";
 
 import { eq, and } from "drizzle-orm";
 import jwt, { verify } from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 // import {
 //     hashPassword,
@@ -12,6 +13,8 @@ import jwt, { verify } from "jsonwebtoken";
 import { generateToken } from "../utils/jwtHelper";
 import { warehouses } from "../models/schema";
 import { verifyMicrosoftToken } from "./microsoft.service";
+
+import { UserStatus } from "../models/enums/userStatus.enum";
 
 export class AuthService {
 
@@ -32,25 +35,34 @@ export class AuthService {
 
     static async login(email: string, password: string) {
 
-        const conditions = [
-            eq(users.email, email),
-            eq(users.password, password),
-        ];
-
         const user = await db.query.users.findFirst({
-            where: and(...conditions),
+            where: eq(users.email, email),
         });
 
         if (!user)
             throw new Error("Invalid Credentials");
 
-        // const isValid = await comparePassword(
-        //     password,
-        //     user.password
-        // );
+        if (user.status === UserStatus.INVITED || !user.password) {
+            throw new Error("Your account is pending activation. Please check your invitation email or contact your administrator.");
+        }
 
-        // if (!isValid)
-        //     throw new Error("Invalid Credentials");
+        if (user.status === UserStatus.DISABLED) {
+            throw new Error("Your account has been disabled. Please contact your administrator.");
+        }
+
+        let isMatch = user.password === password;
+        if (!isMatch) {
+            // Check bcrypt if applicable
+            try {
+                isMatch = await bcrypt.compare(password, user.password);
+            } catch (e) {
+                isMatch = false;
+            }
+        }
+
+        if (!isMatch) {
+            throw new Error("Invalid Credentials");
+        }
 
         const token = generateToken({
 

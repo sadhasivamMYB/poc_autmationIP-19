@@ -10,7 +10,9 @@ import compare from "./routes/compare.route";
 import dashboard from "./routes/dashboardStats.route"
 import summaryRoutes from "./routes/summary.route"
 import excelRoutes from "./routes/excel.route";
-import "./job/stockGeneration.job"
+import invitationRoutes from "./routes/invitation.route";
+import "./job/stockGeneration.job";
+// import "./job/invitationCleanup.job";
 
 const app = express();
 
@@ -47,6 +49,7 @@ app.use('/api/dashboard-stats', dashboard)
 app.use('/api/excel', excelRoutes)
 app.use('/api/compare', compare)
 app.use('/api/summary', summaryRoutes)
+app.use('/api/invitations', invitationRoutes)
 
 app.get("/health", (req, res) => {
     res.send("Hello World! API is running.");

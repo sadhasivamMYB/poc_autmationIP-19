@@ -8,6 +8,8 @@ import {
 
 import { warehouses } from "../warehouse/warehouse.schema";
 
+import { UserStatus } from "../../enums/userStatus.enum";
+
 export const users = pgTable("users", {
     id: serial("id").primaryKey(),
 
@@ -17,13 +19,17 @@ export const users = pgTable("users", {
         .unique()
         .notNull(),
 
-    password: varchar("password", { length: 255 }).notNull(),
+    password: varchar("password", { length: 255 }),
 
     role: varchar("role", { length: 30 }).notNull(),
+
+    status: varchar("status", { length: 20 }).default(UserStatus.ACTIVE).notNull(),
 
     warehouseId: integer("warehouse_id").references(
         () => warehouses.id
     ),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
+
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

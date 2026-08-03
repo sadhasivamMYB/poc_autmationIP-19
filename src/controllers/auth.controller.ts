@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import { AuthService } from "../service/auth.service";
 import { LoginRequest, RegisterRequest, MicrosoftLoginRequest } from "../zod/auth.zod";
 
+import { sanitizeUser } from "../utils/sanitizeUser";
+
 export class AuthController {
 
     static async register(req: Request, res: Response) {
@@ -35,7 +37,7 @@ export class AuthController {
 
         res.json({
             success: true,
-            data: req.user
+            data: sanitizeUser(req.user)
         });
 
     }

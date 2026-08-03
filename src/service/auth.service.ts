@@ -16,6 +16,8 @@ import { verifyMicrosoftToken } from "./microsoft.service";
 
 import { UserStatus } from "../models/enums/userStatus.enum";
 
+import { sanitizeUser } from "../utils/sanitizeUser";
+
 export class AuthService {
 
     static async register(data: any) {
@@ -30,7 +32,7 @@ export class AuthService {
             })
             .returning();
 
-        return user;
+        return sanitizeUser(user);
     }
 
     static async login(email: string, password: string) {
@@ -43,7 +45,7 @@ export class AuthService {
             throw new Error("Invalid Credentials");
 
         if (user.status === UserStatus.INVITED || !user.password) {
-            throw new Error("Your account is pending activation. Please check your invitation email or contact your administrator.");
+            throw new Error("Please activate your account using the invitation email.");
         }
 
         if (user.status === UserStatus.DISABLED) {
@@ -74,8 +76,7 @@ export class AuthService {
 
         return {
             token,
-            user,
-
+            user: sanitizeUser(user),
         };
     }
 
@@ -99,17 +100,26 @@ export class AuthService {
             throw new Error("User does not exist in the system. Access denied.");
         }
 
-        // 4. Generate Application JWT
+        // 4. Guard check for user status
+        if (user.status === UserStatus.INVITED) {
+            throw new Error("Please activate your account using the invitation email.");
+        }
+
+        if (user.status === UserStatus.DISABLED) {
+            throw new Error("Your account has been disabled. Please contact your administrator.");
+        }
+
+        // 5. Generate Application JWT
         const appToken = generateToken({
             id: user.id,
             warehouseId: user.warehouseId,
             role: user.role,
         });
 
-        // 5. Return token and user
+        // 6. Return token and sanitized user DTO
         return {
             token: appToken,
-            user: user
+            user: sanitizeUser(user),
         };
     }
 }

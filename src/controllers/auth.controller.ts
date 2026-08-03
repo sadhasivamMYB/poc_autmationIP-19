@@ -9,7 +9,12 @@ export class AuthController {
         const body: RegisterRequest = req.body;
         const user = await AuthService.register(body);
 
-        res.status(201).json({ success: true, data: user });
+        const user = await AuthService.register(req.body);
+
+        res.status(201).json({
+            success: true,
+            data: user
+        });
 
     }
 
@@ -22,13 +27,19 @@ export class AuthController {
 
         );
 
-        res.json({ success: true, data });
+        res.json({
+            success: true,
+            data
+        });
 
     }
 
     static async profile(req: any, res: Response) {
 
-        res.json({ success: true, data: req.user });
+        res.json({
+            success: true,
+            data: req.user
+        });
 
     }
 
@@ -38,7 +49,10 @@ export class AuthController {
             const token = body.token;
             const response = await AuthService.microsoftLogin(token);
 
-            res.json({ success: true, data: response });
+            res.json({
+                success: true,
+                data: response
+            });
         } catch (error: unknown) {
             const err = error as Error;
             console.error("Microsoft login error:", err.message);

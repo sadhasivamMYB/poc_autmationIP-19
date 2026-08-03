@@ -2,6 +2,7 @@
 
 export { users } from './users/users.schema';
 export { usersRelations } from './users/users.relations';
+export { userInvitations } from './users/userInvitations.schema';
 export { warehouses } from './warehouse/warehouse.schema';
 export { masterItems } from './master/master.schema';
 export { dailyStock } from './dailyStock/dailyStock.schema';

@@ -20,6 +20,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.2.0",
+    "@types/nodemailer": "^8.0.1",
     "drizzle-kit": "^0.31.10",
     "typescript": "^6.0.3"
   },
@@ -36,6 +37,7 @@
     "jwks-rsa": "^4.1.0",
     "multer": "^2.2.0",
     "node-cron": "^4.5.0",
+    "nodemailer": "^9.0.3",
     "postgres": "^3.4.9",
     "uuid": "^14.0.1",
     "xlsx": "^0.18.5"

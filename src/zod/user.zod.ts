@@ -7,7 +7,6 @@ export const UserZod = {
         email: emailSchema.max(255),
         password: passwordSchema.max(255),
         role: nonStringEmptySchema.max(30),
-        warehouseId: z.number().int().positive().optional(),
     }),
 
     updateUserSchema: z.object({

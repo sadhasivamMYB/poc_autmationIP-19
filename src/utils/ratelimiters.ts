@@ -3,7 +3,7 @@ import rateLimit from "express-rate-limit";
 const LoginLimiter = rateLimit({
 
     windowMs: 15 * 60 * 1000,
-    max: 5,
+    max: 10,
     message: {
         success: false,
         message: "Too many requests. Please try again later."
@@ -11,6 +11,18 @@ const LoginLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false
 });
+
+// const RegistartionLimiter = rateLimit({
+
+//     windowMs: 24 * 60 * 60 * 1000,
+//     max: 40,
+//     message: {
+//         success: false,
+//         message: "Too many requests. Please try again later."
+//     },
+//     standardHeaders: true,
+//     legacyHeaders: false
+// });
 
 const uploadLimiter = rateLimit({
 

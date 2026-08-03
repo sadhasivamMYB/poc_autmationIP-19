@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import { AuthController } from "../controllers/auth.controller";
+import { InvitationController } from "../controllers/invitation.controller";
 
 import {
     authenticate
@@ -43,6 +44,11 @@ router.post(
     "/microsoft",
     LoginLimiter,
     AuthController.microsoftLogin
+);
+
+router.post(
+    "/activate-account",
+    InvitationController.activateAccount
 );
 
 export default router;

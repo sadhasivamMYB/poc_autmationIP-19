@@ -122,7 +122,7 @@ export class MasterItemsController {
 
             const file = req.file;
 
-            console.log(req.files)
+            // console.log(req.files)
             if (!file) {
                 return res.status(400).json({
                     success: false,

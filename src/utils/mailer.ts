@@ -83,9 +83,9 @@ export const sendOTPEmail = async (to: string, otp: any) => {
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log(`Invitation email sent to ${to}`);
+        console.log(`OTP email sent to ${to}`);
     } catch (err: any) {
-        console.error(`Failed to send invitation email to ${to}:`, err.message);
+        console.error(`Failed to send OTP email to ${to}:`, err.message);
         // Non-blocking error
     }
 }

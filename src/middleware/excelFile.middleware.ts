@@ -1,11 +1,6 @@
 import multer from "multer";
 
-const storage = multer.diskStorage({
-    destination: "./uploads/excel/master-items",
-    filename: (req, file, cb) => {
-        cb(null, "master_items_" + Date.now() + "-" + file.originalname);
-    }
-});
+const storage = multer.memoryStorage();
 
 export const uploadExcelMasterItems = multer({
     storage,
@@ -18,12 +13,7 @@ export const uploadExcelMasterItems = multer({
     }
 });
 
-const storageGeneral = multer.diskStorage({
-    destination: "./uploads/excel/general",
-    filename: (req, file, cb) => {
-        cb(null, "general_" + Date.now() + "-" + file.originalname);
-    }
-});
+const storageGeneral = multer.memoryStorage();
 
 export const uploadExcelGeneral = multer({
     storage: storageGeneral,

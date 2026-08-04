@@ -98,8 +98,6 @@ export class DailyStockService {
 
     static async bulkUpdate(stocks: any[]) {
 
-
-        console.log("enterd to update")
         const result = await db.transaction(async (tx) => {
 
             const updatedRows = [];

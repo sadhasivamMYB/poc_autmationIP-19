@@ -49,8 +49,6 @@ export class DailyStockController {
 
             const { stocks } = req.body;
 
-            console.log(stocks, "❌❌")
-
             const result =
                 await DailyStockService.bulkUpdate(stocks);
 
@@ -99,10 +97,6 @@ export class DailyStockController {
                     id: true,
                 }
             })
-
-            console.log(warehouse, "WarehouseName")
-
-
             const stocks =
                 await DailyStockService.customDateStockHistory(date, warehouseId);
 

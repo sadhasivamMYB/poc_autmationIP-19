@@ -17,6 +17,9 @@ import { verifyMicrosoftToken } from "./microsoft.service";
 import { UserStatus } from "../models/enums/userStatus.enum";
 
 import { sanitizeUser } from "../utils/sanitizeUser";
+import { generate_OTP } from "../utils/OTP_generator";
+import { sendOTPEmail } from "../utils/mailer";
+import { otp_verification } from "../models/schema/otp_verification/otpVerification.schema";
 
 export class AuthService {
 
@@ -66,17 +69,21 @@ export class AuthService {
             throw new Error("Invalid Credentials");
         }
 
-        const token = generateToken({
+        const otp = generate_OTP();
 
-            id: user.id,
-            warehouseId: user.warehouseId,
-            role: user.role,
-
+        await db.insert(otp_verification).values({
+            userId: user.id,
+            otp,
+            expiresAt: new Date(Date.now() + 5 * 60 * 1000),
+            attempts: 0
         });
 
+        sendOTPEmail(email, otp)
+
         return {
-            token,
-            user: sanitizeUser(user),
+
+            otpRequired: true,
+            email: email
         };
     }
 

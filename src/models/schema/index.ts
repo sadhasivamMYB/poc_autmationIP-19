@@ -9,3 +9,4 @@ export { dailyStock } from './dailyStock/dailyStock.schema';
 export { initialStock } from "./initialStock/initialStock.schema";
 export { initialStockRelations } from "./initialStock/initialStock.relations";
 export { compareStock } from "./compareStock/comparestock.schema";
+export { otp_verification } from "./otp_verification/otpVerification.schema"

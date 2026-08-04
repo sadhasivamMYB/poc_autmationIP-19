@@ -3,25 +3,29 @@ import { db } from "../database/db";
 import { eq } from "drizzle-orm";
 import { userInvitations, users } from "../models/schema";
 
+
+const frontendUrl = process.env.FRONTEND_URL;
+const fromAddress = process.env.MAIL_FROM;
+const transporter = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: Number(process.env.MAIL_PORT),
+    auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+
+    },
+});
+
 export const sendInvitationEmail = async (to: string, rawToken: string) => {
-    const frontendUrl = process.env.FRONTEND_URL;
+
     const activationLink = `${frontendUrl}/activate-account?token=${rawToken}`;
-    const fromAddress = process.env.MAIL_FROM
+
 
     const [user_nameFromToken] = await db.select({ fullName: users.fullName })
         .from(userInvitations)
         .innerJoin(users, eq(userInvitations.userId, users.id))
         .where(eq(users.email, to))
 
-    const transporter = nodemailer.createTransport({
-        host: process.env.MAIL_HOST,
-        port: Number(process.env.MAIL_PORT),
-        auth: {
-            user: process.env.MAIL_USER,
-            pass: process.env.MAIL_PASS,
-
-        },
-    });
 
     const mailOptions = {
         from: fromAddress,
@@ -53,3 +57,35 @@ export const sendInvitationEmail = async (to: string, rawToken: string) => {
         // Non-blocking error
     }
 };
+
+
+export const sendOTPEmail = async (to: string, otp: any) => {
+
+    const [user_name] = await db.select({ fullName: users.fullName })
+        .from(users)
+        .where(eq(users.email, to))
+
+    const mailOptions = {
+        from: fromAddress,
+        to,
+        subject: "Stock Automation - Verify Your OTP",
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <h2 style="color: #333;">Welcome to Stock Automation</h2>
+                <p>Hello, ${user_name?.fullName} </p>
+                <p>Your OTP for login is: <strong> ${otp} </strong></p>
+                <p>This OTP will expire in 5 minutes. If you did not expect this OTP, please ignore this email.</p>
+                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+                <p style="color: #999; font-size: 12px; text-align: center;">Stock Automation Team</p>
+            </div>
+        `,
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Invitation email sent to ${to}`);
+    } catch (err: any) {
+        console.error(`Failed to send invitation email to ${to}:`, err.message);
+        // Non-blocking error
+    }
+}

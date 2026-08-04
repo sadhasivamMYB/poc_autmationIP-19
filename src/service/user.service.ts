@@ -13,8 +13,8 @@ export class UserService {
                 warehouse: true,
             },
 
-            where: ne(users.role, "ADMIN"),
-            orderBy: [desc(users.createdAt)],
+            // where: ne(users.role, "ADMIN"),
+            // orderBy: [desc(users.createdAt)],
         });
     }
 

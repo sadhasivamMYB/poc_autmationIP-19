@@ -12,7 +12,7 @@ export class InitialStockController {
                 return res.status(400).json({ success: false, message: "No file uploaded" });
             }
 
-            console.log(file, "file 🔃🔃🔃🔃")
+            // console.log(file, "file 🔃🔃🔃🔃")
             await InitialStockService.excelUpload(file);
             return res.status(200).json({
                 success: true,

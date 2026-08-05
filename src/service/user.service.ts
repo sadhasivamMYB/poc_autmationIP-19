@@ -55,6 +55,9 @@ export class UserService {
         if (data.password) {
             updateData.password = data.password;
         }
+        if (data.status) {
+            updateData.status = data.status;
+        }
 
         const [user] = await db
             .update(users)

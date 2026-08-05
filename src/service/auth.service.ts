@@ -51,8 +51,8 @@ export class AuthService {
             throw new Error("Please activate your account using the invitation email.");
         }
 
-        if (user.status === UserStatus.DISABLED) {
-            throw new Error("Your account has been disabled. Please contact your administrator.");
+        if (user.status === UserStatus.INACTIVE) {
+            throw new Error("Your account has been deactivated. Please contact your administrator.");
         }
 
         let isMatch = user.password === password;
@@ -112,8 +112,8 @@ export class AuthService {
             throw new Error("Please activate your account using the invitation email.");
         }
 
-        if (user.status === UserStatus.DISABLED) {
-            throw new Error("Your account has been disabled. Please contact your administrator.");
+        if (user.status === UserStatus.INACTIVE) {
+            throw new Error("Your account has been deactivated. Please contact your administrator.");
         }
 
         // 5. Generate Application JWT

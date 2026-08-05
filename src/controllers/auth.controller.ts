@@ -18,19 +18,30 @@ export class AuthController {
     }
 
     static async login(req: Request, res: Response) {
-        const body: LoginRequest = req.body;
-        const data = await AuthService.login(
+        try {
+            const body: LoginRequest = req.body;
+            const data = await AuthService.login(
+                body.email,
+                body.password
+            );
 
-            body.email,
-            body.password
-
-        );
-
-        res.json({
-            success: true,
-            data
-        });
-
+            res.json({
+                success: true,
+                data
+            });
+        } catch (error: any) {
+            const errMessage = error.message || "Login failed";
+            if (errMessage === "Your account has been deactivated. Please contact your administrator.") {
+                return res.status(403).json({
+                    success: false,
+                    message: errMessage
+                });
+            }
+            return res.status(400).json({
+                success: false,
+                message: errMessage
+            });
+        }
     }
 
     static async profile(req: any, res: Response) {
@@ -55,6 +66,12 @@ export class AuthController {
         } catch (error: unknown) {
             const err = error as Error;
             console.error("Microsoft login error:", err.message);
+            if (err.message === "Your account has been deactivated. Please contact your administrator.") {
+                return res.status(403).json({
+                    success: false,
+                    message: err.message
+                });
+            }
             res.status(401).json({
                 success: false,
                 message: err.message === "User does not exist in the system. Access denied."

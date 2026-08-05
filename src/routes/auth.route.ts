@@ -7,7 +7,7 @@ import {
     authenticate
 } from "../middleware/auth.middleware";
 import { isAdmin } from "../middleware/isAdmin.middleware";
-import { LoginLimiter } from "../utils/ratelimiters";
+import { LoginLimiter, resendOTPLimiter, VerifyOTPLimiter } from "../utils/ratelimiters";
 import { OtpController } from "../controllers/otp.controller";
 
 const router = Router();
@@ -52,8 +52,8 @@ router.post(
     InvitationController.activateAccount
 );
 
-router.post("/verify/otp", OtpController.verifyOTP)
+router.post("/verify/otp", VerifyOTPLimiter, OtpController.verifyOTP)
 
-router.post("/resend/otp", OtpController.resendOTP)
+router.post("/resend/otp", resendOTPLimiter, OtpController.resendOTP)
 
 export default router;

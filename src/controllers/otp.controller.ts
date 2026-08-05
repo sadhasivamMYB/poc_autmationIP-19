@@ -28,14 +28,24 @@ export class OtpController {
             if (!otpVerification)
                 throw new Error("Invalid Credentials");
 
-            if (otpVerification.otp !== body.otp)
+            if (otpVerification.attempts >= 3) {
+                await db.delete(otp_verification).where(eq(otp_verification.id, otpVerification.id));
+                throw new Error("Too many OTP attempts. Please try again later.");
+            }
+
+            if (otpVerification.otp !== body.otp) {
+                await db.update(otp_verification).set({
+                    attempts: otpVerification.attempts + 1,
+                }).where(eq(otp_verification.id, otpVerification.id));
                 throw new Error("Wrong OTP");
+            }
 
-            if (otpVerification.expiresAt < new Date())
+            if (otpVerification.expiresAt < new Date()) {
+                await db.delete(otp_verification).where(eq(otp_verification.id, otpVerification.id));
                 throw new Error("OTP Expired");
+            }
 
-            if (otpVerification.attempts >= 3)
-                throw new Error("Invalid Credentials");
+
 
             await db.update(otp_verification).set({
                 verified: true,

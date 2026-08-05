@@ -48,4 +48,28 @@ const logLimiter = rateLimit({
     legacyHeaders: false
 })
 
-export { LoginLimiter, uploadLimiter, logLimiter }
+const VerifyOTPLimiter = rateLimit({
+
+    windowMs: 30 * 60 * 1000,
+    max: 3,
+    message: {
+        success: false,
+        message: "Too many OTP requests. Please try again later."
+    },
+    standardHeaders: true,
+    legacyHeaders: false
+})
+
+const resendOTPLimiter = rateLimit({
+
+    windowMs: 30 * 60 * 1000,
+    max: 1,
+    message: {
+        success: false,
+        message: "Too many Resend OTP requests. Please try again later."
+    },
+    standardHeaders: true,
+    legacyHeaders: false
+})
+
+export { LoginLimiter, uploadLimiter, logLimiter, VerifyOTPLimiter, resendOTPLimiter }

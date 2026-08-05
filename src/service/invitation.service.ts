@@ -66,13 +66,10 @@ export class InvitationService {
                 data: sanitizeUser(newUser),
                 message: "Invitation email sent successfully."
             };
-
         } catch (err) {
-
-            return {
-                success: false,
-                message: "User created, but failed to send invitation email."
-            };
+            // Rollback the created user since email failed
+            await db.delete(users).where(eq(users.id, newUser.id));
+            throw new Error("Failed to send invitation email. Please try again.");
         }
 
     }
@@ -148,7 +145,11 @@ export class InvitationService {
             );
         });
 
-        sendInvitationEmail(user.email, rawToken);
+        try {
+            await sendInvitationEmail(user.email, rawToken);
+        } catch (err) {
+            throw new Error("Failed to send invitation email. Please try again.");
+        }
 
         return { message: "Invitation resent successfully." };
     }

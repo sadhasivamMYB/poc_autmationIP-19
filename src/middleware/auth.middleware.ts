@@ -33,7 +33,7 @@ export const authenticate = async (
             res.status(401).json({ message: "Token is not valid" });
             return;
         }
-        req.user = { decoded, role: user?.role };
+        req.user = { ...decoded, role: user?.role };
         next();
     } catch (error) {
         if (error instanceof jwt.TokenExpiredError) {

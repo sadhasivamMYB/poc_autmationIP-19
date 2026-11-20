@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, lt, desc } from "drizzle-orm";
 
 import { db } from "../database/db";
 
@@ -92,8 +92,8 @@ export class StockGenerationService {
                 issuedCases: 0,
                 issuedBottles: 0,
 
-                closingCases: 0,
-                closingBottles: 0,
+                closingCases: openingCases,
+                closingBottles: openingBottles,
 
                 status: "OPEN",
             });
@@ -103,25 +103,20 @@ export class StockGenerationService {
     }
 
     /**
-     * Get yesterday closing stock
+     * Get most recent previous closing stock (handles weekends, holidays, and missed days)
      */
     static async getYesterdayStock(
         currentDate: string,
         warehouseId: number,
         itemId: number
     ) {
-        const yesterday = new Date(currentDate);
-
-        yesterday.setDate(yesterday.getDate() - 1);
-
-        const previousDate = yesterday.toISOString().split("T")[0] as string;
-
         return db.query.dailyStock.findFirst({
             where: and(
-                eq(dailyStock.stockDate, previousDate),
+                lt(dailyStock.stockDate, currentDate),
                 eq(dailyStock.warehouseId, warehouseId),
                 eq(dailyStock.itemId, itemId)
             ),
+            orderBy: (dailyStock, { desc }) => [desc(dailyStock.stockDate)],
         });
     }
 

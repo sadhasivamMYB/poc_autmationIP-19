@@ -150,16 +150,16 @@ export class DailyStockService {
                             existing.openingBottles,
 
                         receivedCases:
-                            stock.receivedCases,
+                            stock.receivedCases ?? existing.receivedCases,
 
                         receivedBottles:
-                            stock.receivedBottles,
+                            stock.receivedBottles ?? existing.receivedBottles,
 
                         issuedCases:
-                            stock.issuedCases,
+                            stock.issuedCases ?? existing.issuedCases,
 
                         issuedBottles:
-                            stock.issuedBottles,
+                            stock.issuedBottles ?? existing.issuedBottles,
 
                         bottlePerCase:
                             existingMasterItem!.bottlePerCase,
@@ -172,16 +172,16 @@ export class DailyStockService {
                         .set({
 
                             receivedCases:
-                                stock.receivedCases,
+                                stock.receivedCases ?? existing.receivedCases,
 
                             receivedBottles:
-                                stock.receivedBottles,
+                                stock.receivedBottles ?? existing.receivedBottles,
 
                             issuedCases:
-                                stock.issuedCases,
+                                stock.issuedCases ?? existing.issuedCases,
 
                             issuedBottles:
-                                stock.issuedBottles,
+                                stock.issuedBottles ?? existing.issuedBottles,
 
                             closingCases:
                                 closing.cases,

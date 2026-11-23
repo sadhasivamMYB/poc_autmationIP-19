@@ -5,18 +5,29 @@ export async function seedWarehouses() {
     await db.insert(warehouses).values([
         {
             warehouseName: "Lagos",
+            warehouseCode: "IK01",
+            isActive: true
         },
         {
             warehouseName: "Abuja",
+            warehouseCode: " AB01",
+            isActive: true
         },
         {
             warehouseName: "Port Harcourt",
+            warehouseCode: "PH01",
+            isActive: true
         },
         {
-            warehouseName: "Ibadan",
+            warehouseName: "Benin",
+            warehouseCode: "SC01",
+            isActive: true
+
         },
         {
-            warehouseName: "Kano",
+            warehouseName: "LFZ",
+            warehouseCode: "FG01",
+            isActive: true
         },
     ]);
 

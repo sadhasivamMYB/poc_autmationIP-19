@@ -1,5 +1,6 @@
 import { seedWarehouses } from "./warehouse.seed";
 import { seedMasterItems } from "./masteritem.seed";
+import { seedUsers } from "./user.seed";
 
 async function seed() {
     try {
@@ -7,6 +8,7 @@ async function seed() {
 
         await seedWarehouses();
         await seedMasterItems();
+        await seedUsers();
 
         console.log("🎉 Database Seeded Successfully");
 
